@@ -2,7 +2,7 @@
   "use strict";
 
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var clips = document.querySelectorAll(".clip video");
+  var clips = document.querySelectorAll("video[autoplay]");
 
   // Autoplaying clips: respect reduced motion, and pause while off screen.
   Array.prototype.forEach.call(clips, function (video) {

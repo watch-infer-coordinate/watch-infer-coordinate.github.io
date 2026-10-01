@@ -217,13 +217,24 @@ a.btn-quiet:hover { background: var(--band); border-color: var(--ink); color: va
 
 /* ---------- Videos ---------- */
 
-.clip-row {
+.teaser video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: #ffffff;
+}
+
+.settings {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 24px;
+  margin-top: 24px;
 }
-.clip { margin: 0; }
-.clip video {
+.setting { margin: 0; }
+.setting video {
   display: block;
   width: 100%;
   height: auto;
@@ -231,16 +242,18 @@ a.btn-quiet:hover { background: var(--band); border-color: var(--ink); color: va
   border-radius: 10px;
   background: var(--band);
 }
-.clip figcaption {
-  margin-top: 10px;
+.setting figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 12px;
   font-family: var(--sans);
-  font-size: 0.98rem;
-  font-weight: 600;
-  color: var(--ink);
 }
+.setting-name { font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+.setting-limit { font-size: 0.92rem; line-height: 1.45; color: var(--ink-2); }
+.setting-count { font-size: 0.86rem; font-weight: 600; color: var(--coord); }
 
 .caption,
-.figure figcaption,
 .pair figcaption,
 .note {
   font-family: var(--sans);
@@ -281,7 +294,7 @@ a.btn-quiet:hover { background: var(--band); border-color: var(--ink); color: va
 .prose { max-width: var(--measure); }
 .prose p { margin: 0 0 1em; }
 .prose h3,
-.steps h3 {
+.step-text h3 {
   margin: 0 0 0.4em;
   font-family: var(--sans);
   font-size: 1.14rem;
@@ -291,30 +304,33 @@ a.btn-quiet:hover { background: var(--band); border-color: var(--ink); color: va
 }
 .prose h3 { margin-top: 1.6em; }
 
-.figure { margin: 0 0 8px; }
-
-/* Watch / Infer / Coordinate, under Figure 1 */
-.steps {
+/* Watch / Infer / Coordinate rows */
+.step {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 32px;
-  margin-top: 28px;
+  grid-template-columns: minmax(0, 520px) minmax(0, 1fr);
+  gap: 40px;
+  align-items: center;
+  margin-top: 32px;
 }
-.steps p { margin: 0; font-size: 1rem; line-height: 1.6; color: var(--ink-2); }
-.steps h3 { font-size: 1.3rem; font-weight: 700; }
-.t-watch { color: var(--watch); }
-.t-coord { color: var(--coord); }
-.insight { margin-top: 8px; }
-
-.block > .prose + .table-scroll,
-.block > .prose + .tables { margin-top: 20px; }
-.figure img {
+.step:first-of-type { margin-top: 8px; }
+.step video {
   display: block;
   width: 100%;
   height: auto;
-  background: var(--panel);
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
+  background: var(--band);
 }
-.figure figcaption { max-width: 760px; margin-top: 12px; }
+.step-text { max-width: 460px; }
+.step-text h3 { font-size: 1.6rem; font-weight: 750; letter-spacing: -0.02em; }
+.step-text p { margin: 0; font-size: 1.04rem; line-height: 1.6; color: var(--ink-2); }
+.step-text .note { margin-top: 10px; }
+.t-watch { color: var(--watch); }
+.t-coord { color: var(--coord); }
+.insight { margin-top: 40px; }
+
+.block > .prose + .table-scroll,
+.block > .prose + .tables { margin-top: 20px; }
 
 /* ---------- Tables ---------- */
 
@@ -376,11 +392,6 @@ table.data tr.ours-row th { font-weight: 700; }
 table.data tr.oracle th,
 table.data tr.oracle td { color: var(--ink-3); }
 
-table.specs { min-width: 560px; max-width: 900px; }
-table.specs td { text-align: left; white-space: normal; color: var(--ink-2); }
-table.specs td.num { text-align: right; white-space: nowrap; color: var(--ink); }
-table.specs thead th { vertical-align: bottom; }
-
 .note { margin: 14px 0 0; color: var(--ink-3); }
 .table-scroll .note { font-size: 0.86rem; margin-top: 10px; }
 
@@ -401,6 +412,21 @@ table.specs thead th { vertical-align: bottom; }
   border-radius: 8px;
 }
 .pair figcaption { margin-top: 10px; }
+.shot { position: relative; }
+.tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #ffffff;
+}
+.tag-off { background: rgba(21, 32, 43, 0.86); }
+.tag-on { background: #09704e; }
 
 /* ---------- Citation ---------- */
 
@@ -443,10 +469,7 @@ main { padding-bottom: 96px; }
 
 /* ---------- Dark mode: keep paper figures on white ---------- */
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .figure img { padding: 12px; border-radius: 8px; }
-}
-:root[data-theme="dark"] .figure img { padding: 12px; border-radius: 8px; }
+
 
 /* ---------- Narrow screens ---------- */
 
@@ -455,8 +478,8 @@ main { padding-bottom: 96px; }
 }
 
 @media (max-width: 760px) {
-  .clip-row { grid-template-columns: 1fr; gap: 20px; }
-  .steps { grid-template-columns: 1fr; gap: 20px; }
+  .settings { grid-template-columns: 1fr; gap: 28px; }
+  .step { grid-template-columns: 1fr; gap: 16px; }
 }
 
 @media (max-width: 640px) {

@@ -6,8 +6,6 @@
   <title>Watch, Infer, Coordinate</title>
   <meta name="description" content="A helper robot infers a partner robot's physical constraints by watching it coordinate with another robot, then coordinates with that partner zero-shot on a new task.">
   <meta name="color-scheme" content="light dark">
-  <!-- Keeps search engines from listing the page during review. Delete this line at launch. -->
-  <meta name="robots" content="noindex, nofollow">
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="Watch, Infer, Coordinate: Inferring Robot Partner Constraints for Zero-Shot Coordination">
@@ -64,34 +62,11 @@
 
 <main>
 
-  <section class="clips wide" aria-label="Videos">
-    <div class="clip-row">
-      <figure class="clip">
-        <video autoplay muted loop playsinline preload="auto" poster="static/images/posters/rod.jpg"
-               aria-label="2D rod carrying around two obstacles to the goal">
-          <source src="static/videos/rod.mp4" type="video/mp4">
-        </video>
-        <figcaption>2D rod carrying</figcaption>
-      </figure>
-      <figure class="clip">
-        <video autoplay muted loop playsinline preload="auto" poster="static/images/posters/fixed_ur5.jpg"
-               aria-label="Two fixed-base UR5 arms carrying a beam through an opening in a wall">
-          <source src="static/videos/fixed_ur5.mp4" type="video/mp4">
-        </video>
-        <figcaption>Fixed-base dual-UR5</figcaption>
-      </figure>
-      <figure class="clip">
-        <video autoplay muted loop playsinline preload="auto" poster="static/images/posters/mobile_ur5.jpg"
-               aria-label="Two mobile UR5 robots carrying a beam past walls">
-          <source src="static/videos/mobile_ur5.mp4" type="video/mp4">
-        </video>
-        <figcaption>Mobile dual-UR5</figcaption>
-      </figure>
-    </div>
-    <p class="caption">
-      Our helper carrying an object with a constrained partner on new tasks with obstacles. It has never seen this
-      partner attempt these tasks. It only watched the partner work with a different robot on obstacle-free tasks.
-    </p>
+  <section class="teaser wide" aria-label="Teaser video">
+    <video autoplay muted loop playsinline controls preload="auto" poster="static/images/posters/teaser.jpg"
+           aria-label="Teaser: a helper robot watches a partner work with another robot, infers the partner's physical limits, and then coordinates with it on new tasks">
+      <source src="static/videos/teaser.mp4" type="video/mp4">
+    </video>
   </section>
 
   <p class="tagline wrap">The partner's physical limits transfer across tasks.</p>
@@ -120,30 +95,42 @@
 
   <section class="block wrap" id="how">
     <h2>How it works</h2>
-    <figure class="figure">
-      <picture>
-        <source srcset="static/images/overview.webp" type="image/webp">
-        <img src="static/images/overview.png" width="2000" height="989" loading="lazy"
-             alt="Three panels. Watch: a demonstrator robot and a constrained robot carry a rod together. Infer: the helper reasons about joint position, joint velocity, and base direction limits. Coordinate: the helper carries the rod with the constrained robot through an opening in a wall.">
-      </picture>
-    </figure>
 
-    <div class="steps">
-      <div>
+    <div class="step">
+      <video autoplay muted loop playsinline preload="metadata" poster="static/images/posters/step_watch.jpg"
+             aria-label="A demonstrator robot and a constrained partner robot carrying a rod together">
+        <source src="static/videos/step_watch.mp4" type="video/mp4">
+      </video>
+      <div class="step-text">
         <h3 class="t-watch">Watch</h3>
         <p>
           The helper observes a demonstrator and the constrained agent carry an object on obstacle-free tasks. It
           sees both robots' states and actions, but not the agent's limits.
         </p>
       </div>
-      <div>
+    </div>
+
+    <div class="step">
+      <video autoplay muted loop playsinline preload="metadata" poster="static/images/posters/step_infer.jpg"
+             aria-label="Example candidate constraints being ruled out until a joint velocity limit and a base direction limit remain">
+        <source src="static/videos/step_infer.mp4" type="video/mp4">
+      </video>
+      <div class="step-text">
         <h3>Infer</h3>
         <p>
           Each candidate constraint, such as a joint position limit, a joint velocity limit, or a blocked base
           direction, is scored by how well a model of both robots' behavior explains the observed actions.
         </p>
+        <p class="note">The animation shows example candidates. Each setting has between 172 and 2,665.</p>
       </div>
-      <div>
+    </div>
+
+    <div class="step">
+      <video autoplay muted loop playsinline preload="metadata" poster="static/images/posters/step_coord.jpg"
+             aria-label="The helper and the constrained partner, two mobile UR5 robots, carrying a beam through an opening in a wall">
+        <source src="static/videos/step_coord.mp4" type="video/mp4">
+      </video>
+      <div class="step-text">
         <h3 class="t-coord">Coordinate</h3>
         <p>
           The helper takes the demonstrator's place on a new task with obstacles. Its planner only considers motions
@@ -164,53 +151,50 @@
 
   <section class="block wrap" id="benchmark">
     <h2>Benchmark</h2>
-    <figure class="figure">
-      <picture>
-        <source srcset="static/images/benchmark.webp" type="image/webp">
-        <img src="static/images/benchmark.png" width="2000" height="1221" loading="lazy"
-             alt="Top row: obstacle-free demonstrations in the 2D rod, fixed-base UR5, and mobile UR5 settings, with the constrained robot's limits labelled. Bottom row: the same settings at test time, with obstacles and the helper in place of the demonstrator.">
-      </picture>
-      <figcaption>
-        Top: obstacle-free demonstrations, with the constrained agent's limits labelled. Bottom: new tasks with
-        obstacles at test time.
-      </figcaption>
-    </figure>
-
     <div class="prose">
       <p>
-        Three joint-carrying settings of increasing physical complexity. At test time, obstacles block the direct
-        path to the goal, so the team needs motions that may never appear in the demonstrations.
+        Three joint-carrying settings of increasing physical complexity. Demonstrations are obstacle-free. At test
+        time, obstacles block the direct path to the goal, so the team needs motions that may never appear in the
+        demonstrations.
       </p>
     </div>
 
-    <div class="table-scroll">
-      <table class="data specs">
-        <thead>
-          <tr>
-            <th scope="col">Setting</th>
-            <th scope="col">What the constrained agent is limited in</th>
-            <th scope="col" class="num">Candidate constraints</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">2D rod carrying</th>
-            <td>The range of force directions it can apply</td>
-            <td class="num">2,665</td>
-          </tr>
-          <tr>
-            <th scope="row">Fixed-base dual-UR5</th>
-            <td>Velocity or position limits on its six joints, alone or in pairs</td>
-            <td class="num">172</td>
-          </tr>
-          <tr>
-            <th scope="row">Mobile dual-UR5</th>
-            <td>An arm-joint constraint combined with a base-direction constraint</td>
-            <td class="num">475</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="settings">
+      <figure class="setting">
+        <video autoplay muted loop playsinline preload="metadata" poster="static/images/posters/rod.jpg"
+               aria-label="2D rod carrying around two obstacles to the goal">
+          <source src="static/videos/rod.mp4" type="video/mp4">
+        </video>
+        <figcaption>
+          <span class="setting-name">2D rod carrying</span>
+          <span class="setting-limit">Limited in the range of force directions it can apply</span>
+          <span class="setting-count">2,665 candidate constraints</span>
+        </figcaption>
+      </figure>
+      <figure class="setting">
+        <video autoplay muted loop playsinline preload="metadata" poster="static/images/posters/fixed_ur5.jpg"
+               aria-label="Two fixed-base UR5 arms carrying a beam through an opening in a wall">
+          <source src="static/videos/fixed_ur5.mp4" type="video/mp4">
+        </video>
+        <figcaption>
+          <span class="setting-name">Fixed-base dual-UR5</span>
+          <span class="setting-limit">Velocity or position limits on its six joints, alone or in pairs</span>
+          <span class="setting-count">172 candidate constraints</span>
+        </figcaption>
+      </figure>
+      <figure class="setting">
+        <video autoplay muted loop playsinline preload="metadata" poster="static/images/posters/mobile_ur5.jpg"
+               aria-label="Two mobile UR5 robots carrying a beam through an opening in a wall">
+          <source src="static/videos/mobile_ur5.mp4" type="video/mp4">
+        </video>
+        <figcaption>
+          <span class="setting-name">Mobile dual-UR5</span>
+          <span class="setting-limit">An arm-joint constraint combined with a base-direction constraint</span>
+          <span class="setting-count">475 candidate constraints</span>
+        </figcaption>
+      </figure>
     </div>
+    <p class="note">Videos show our helper on new tasks with obstacles.</p>
   </section>
 
   <section class="block wrap" id="results">
@@ -306,20 +290,26 @@
     </div>
     <div class="pair">
       <figure>
-        <picture>
-          <source srcset="static/images/plan_ignored.webp" type="image/webp">
-          <img src="static/images/plan_ignored.jpg" width="600" height="450" loading="lazy"
-               alt="Mobile dual-UR5 scene planned without the partner's constraint: the constrained robot's arm is sent to a pose it cannot reach.">
-        </picture>
-        <figcaption>When the planner ignores the partner's constraint, the plan needs a pose the partner cannot reach.</figcaption>
+        <div class="shot">
+          <picture>
+            <source srcset="static/images/plan_ignored.webp" type="image/webp">
+            <img src="static/images/plan_ignored.jpg" width="600" height="450" loading="lazy"
+                 alt="Mobile dual-UR5 scene planned without the partner's constraint: the constrained robot's arm is sent to a pose it cannot reach.">
+          </picture>
+          <span class="tag tag-off">Constraint ignored</span>
+        </div>
+        <figcaption>The plan needs a pose the partner cannot reach.</figcaption>
       </figure>
       <figure>
-        <picture>
-          <source srcset="static/images/plan_inferred.webp" type="image/webp">
-          <img src="static/images/plan_inferred.jpg" width="600" height="450" loading="lazy"
-               alt="The same scene planned with the inferred constraint, with the constrained robot in a different, feasible configuration.">
-        </picture>
-        <figcaption>With the inferred constraint, the planner picks a feasible alternative.</figcaption>
+        <div class="shot">
+          <picture>
+            <source srcset="static/images/plan_inferred.webp" type="image/webp">
+            <img src="static/images/plan_inferred.jpg" width="600" height="450" loading="lazy"
+                 alt="The same scene planned with the inferred constraint, with the constrained robot in a different, feasible configuration.">
+          </picture>
+          <span class="tag tag-on">Inferred constraint</span>
+        </div>
+        <figcaption>The planner picks a feasible alternative.</figcaption>
       </figure>
     </div>
   </section>
