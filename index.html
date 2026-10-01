@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Watch, Infer, Coordinate</title>
+  <meta name="description" content="A helper robot infers a partner robot's physical constraints by watching it coordinate with another robot, then coordinates with that partner zero-shot on a new task.">
+  <meta name="color-scheme" content="light dark">
+  <!-- Keeps search engines from listing the page during review. Delete this line at launch. -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Watch, Infer, Coordinate: Inferring Robot Partner Constraints for Zero-Shot Coordination">
+  <meta property="og:description" content="A helper robot infers a partner robot's physical constraints by watching it coordinate with another robot, then coordinates with that partner zero-shot on a new task.">
+  <meta property="og:url" content="https://watch-infer-coordinate.github.io/">
+  <meta property="og:image" content="https://watch-infer-coordinate.github.io/static/images/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="static/images/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Schibsted+Grotesk:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+  <link rel="stylesheet" href="static/css/style.css">
+  <script defer src="static/js/main.js"></script>
+</head>
+<body>
+
+<header class="masthead wrap">
+  <h1 class="title">
+    <span class="t-watch">Watch</span>, <span class="t-infer">Infer</span>, <span class="t-coord">Coordinate</span>
+  </h1>
+  <p class="subtitle">Inferring Robot Partner Constraints for Zero-Shot Coordination</p>
+
+  <!-- To link an author, wrap the name in <a href="...">. -->
+  <ul class="authors">
+    <li><a href="https://suyuye.com">Suyu Ye</a><sup>1,2<span class="dg">&dagger;</span></sup></li>
+    <li>Zheyuan Zhang<sup>1,2<span class="dg">&dagger;</span></sup></li>
+    <li>Vaishnav Tadiparthi<sup>1</sup></li>
+    <li>Hossein Nourkhiz Mahjoub<sup>1</sup></li>
+    <li>Ehsan Moradi Pari<sup>1</sup></li>
+    <li>Tianmin Shu<sup>2</sup></li>
+    <li>Homanga Bharadhwaj<sup>2</sup></li>
+    <li>Nakul Agarwal<sup>1</sup></li>
+  </ul>
+  <p class="affiliations"><span><sup>1</sup>Honda Research Institute USA</span> <span><sup>2</sup>Johns Hopkins University</span></p>
+  <p class="footnote"><sup class="dg">&dagger;</sup>Work done during an internship at Honda Research Institute USA.</p>
+
+  <nav class="links" aria-label="Paper resources">
+    <!-- TODO: replace with the arXiv abstract URL once the preprint is posted, and drop the is-pending class. -->
+    <span class="btn is-pending" title="Link will be added once the preprint is posted">arXiv <small>soon</small></span>
+    <!-- TODO: replace with the code repository URL on release. -->
+    <span class="btn is-pending" title="Code will be released with the benchmark">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+      Code <small>soon</small>
+    </span>
+  </nav>
+
+  <p class="lede">
+    A helper robot watches a partner work with another robot, infers the partner's physical limits from how both
+    robots moved, then coordinates with that partner on a new task.
+  </p>
+</header>
+
+<main>
+
+  <section class="clips wide" aria-label="Videos">
+    <div class="clip-row">
+      <figure class="clip">
+        <video autoplay muted loop playsinline preload="auto" poster="static/images/posters/rod.jpg"
+               aria-label="2D rod carrying around two obstacles to the goal">
+          <source src="static/videos/rod.mp4" type="video/mp4">
+        </video>
+        <figcaption>2D rod carrying</figcaption>
+      </figure>
+      <figure class="clip">
+        <video autoplay muted loop playsinline preload="auto" poster="static/images/posters/fixed_ur5.jpg"
+               aria-label="Two fixed-base UR5 arms carrying a beam through an opening in a wall">
+          <source src="static/videos/fixed_ur5.mp4" type="video/mp4">
+        </video>
+        <figcaption>Fixed-base dual-UR5</figcaption>
+      </figure>
+      <figure class="clip">
+        <video autoplay muted loop playsinline preload="auto" poster="static/images/posters/mobile_ur5.jpg"
+               aria-label="Two mobile UR5 robots carrying a beam past walls">
+          <source src="static/videos/mobile_ur5.mp4" type="video/mp4">
+        </video>
+        <figcaption>Mobile dual-UR5</figcaption>
+      </figure>
+    </div>
+    <p class="caption">
+      Our helper carrying an object with a constrained partner on new tasks with obstacles. It has never seen this
+      partner attempt these tasks. It only watched the partner work with a different robot on obstacle-free tasks.
+    </p>
+  </section>
+
+  <p class="tagline wrap">The partner's physical limits transfer across tasks.</p>
+
+  <section class="block wrap" id="abstract">
+    <h2>Abstract</h2>
+    <div class="prose">
+      <p>
+        Robots operating in the physical world will increasingly need to coordinate with other robots, particularly
+        in manipulation tasks where an object may be too large or heavy for a single robot to carry alone. Physical
+        limitations caused by hardware degradation or actuator faults can restrict the actions a robot can reliably
+        execute, yet these limitations may be unknown to its partner. We study whether a helper can infer a robot
+        partner's physical constraints from observing it coordinate with another robot, then use the inferred
+        capability to coordinate with the same partner on a new task. This is difficult because a demonstration
+        shows what the constrained robot did, but not what it could have done. In physically coupled tasks, the
+        other robot may also compensate for its limitations, making those limitations difficult to identify from
+        the constrained robot's behavior alone. Our key insight is that these constraints shape the joint behavior
+        of the team, making the actions of both robots informative about the constrained partner's capability. We
+        introduce Watch, Infer, Coordinate, a benchmark spanning three physically coupled manipulation settings,
+        together with an inference approach that scores candidate constraints using observed joint behavior. Across
+        all three settings, our method substantially improves constraint inference and zero-shot coordination,
+        approaching an oracle with access to the true constraints.
+      </p>
+    </div>
+  </section>
+
+  <section class="block wrap" id="how">
+    <h2>How it works</h2>
+    <figure class="figure">
+      <picture>
+        <source srcset="static/images/overview.webp" type="image/webp">
+        <img src="static/images/overview.png" width="2000" height="989" loading="lazy"
+             alt="Three panels. Watch: a demonstrator robot and a constrained robot carry a rod together. Infer: the helper reasons about joint position, joint velocity, and base direction limits. Coordinate: the helper carries the rod with the constrained robot through an opening in a wall.">
+      </picture>
+    </figure>
+
+    <div class="steps">
+      <div>
+        <h3 class="t-watch">Watch</h3>
+        <p>
+          The helper observes a demonstrator and the constrained agent carry an object on obstacle-free tasks. It
+          sees both robots' states and actions, but not the agent's limits.
+        </p>
+      </div>
+      <div>
+        <h3>Infer</h3>
+        <p>
+          Each candidate constraint, such as a joint position limit, a joint velocity limit, or a blocked base
+          direction, is scored by how well a model of both robots' behavior explains the observed actions.
+        </p>
+      </div>
+      <div>
+        <h3 class="t-coord">Coordinate</h3>
+        <p>
+          The helper takes the demonstrator's place on a new task with obstacles. Its planner only considers motions
+          the partner can execute under the inferred constraint.
+        </p>
+      </div>
+    </div>
+
+    <div class="prose insight">
+      <h3>Why watch both robots?</h3>
+      <p>
+        A demonstration shows what the constrained agent did, not what it could have done. Because the robots are
+        physically coupled, the demonstrator can compensate for its partner's limits, which hides them in the
+        partner's own motion. The constraint shapes how both robots move, so we infer it from the actions of both.
+      </p>
+    </div>
+  </section>
+
+  <section class="block wrap" id="benchmark">
+    <h2>Benchmark</h2>
+    <figure class="figure">
+      <picture>
+        <source srcset="static/images/benchmark.webp" type="image/webp">
+        <img src="static/images/benchmark.png" width="2000" height="1221" loading="lazy"
+             alt="Top row: obstacle-free demonstrations in the 2D rod, fixed-base UR5, and mobile UR5 settings, with the constrained robot's limits labelled. Bottom row: the same settings at test time, with obstacles and the helper in place of the demonstrator.">
+      </picture>
+      <figcaption>
+        Top: obstacle-free demonstrations, with the constrained agent's limits labelled. Bottom: new tasks with
+        obstacles at test time.
+      </figcaption>
+    </figure>
+
+    <div class="prose">
+      <p>
+        Three joint-carrying settings of increasing physical complexity. At test time, obstacles block the direct
+        path to the goal, so the team needs motions that may never appear in the demonstrations.
+      </p>
+    </div>
+
+    <div class="table-scroll">
+      <table class="data specs">
+        <thead>
+          <tr>
+            <th scope="col">Setting</th>
+            <th scope="col">What the constrained agent is limited in</th>
+            <th scope="col" class="num">Candidate constraints</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">2D rod carrying</th>
+            <td>The range of force directions it can apply</td>
+            <td class="num">2,665</td>
+          </tr>
+          <tr>
+            <th scope="row">Fixed-base dual-UR5</th>
+            <td>Velocity or position limits on its six joints, alone or in pairs</td>
+            <td class="num">172</td>
+          </tr>
+          <tr>
+            <th scope="row">Mobile dual-UR5</th>
+            <td>An arm-joint constraint combined with a base-direction constraint</td>
+            <td class="num">475</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="block wrap" id="results">
+    <h2>Results</h2>
+
+    <div class="prose">
+      <p>
+        Using both robots' actions, our method recovers the partner's constraints more accurately than prior
+        capability inference in every setting, and planning with them comes close to an oracle that knows the true
+        constraints.
+      </p>
+    </div>
+
+    <div class="tables">
+      <div class="table-scroll">
+        <table class="data">
+          <caption>Constraint inference error &darr; (<i>N</i> = 8)</caption>
+          <thead>
+            <tr>
+              <th scope="col">Method</th>
+              <th scope="col" class="num">2D rod</th>
+              <th scope="col" class="num">Fixed-base</th>
+              <th scope="col" class="num">Mobile</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">CE-CM-Div</th>
+              <td>0.302<i>&plusmn;0.011</i></td><td>0.074<i>&plusmn;0.000</i></td><td>0.250<i>&plusmn;0.000</i></td>
+            </tr>
+            <tr>
+              <th scope="row">Ours, partner only</th>
+              <td class="best">0.000<i>&plusmn;0.000</i></td><td>0.043<i>&plusmn;0.006</i></td><td>0.042<i>&plusmn;0.000</i></td>
+            </tr>
+            <tr class="ours-row">
+              <th scope="row">Ours</th>
+              <td>0.002<i>&plusmn;0.002</i></td><td class="best">0.019<i>&plusmn;0.011</i></td><td class="best">0.009<i>&plusmn;0.000</i></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">
+          Normalized Hamming distance between inferred and true constraints after 8 demonstrations; 0 is exact.
+          "Partner only" is our method using the constrained agent's actions alone.
+        </p>
+      </div>
+
+      <div class="table-scroll">
+        <table class="data">
+          <caption>Success on new tasks with obstacles, % &uarr;</caption>
+          <thead>
+            <tr>
+              <th scope="col">Method</th>
+              <th scope="col" class="num">2D rod</th>
+              <th scope="col" class="num">Fixed-base</th>
+              <th scope="col" class="num">Mobile</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Capacity-blind + CEM</th>
+              <td>51.9<i>&plusmn;3.7</i></td><td>0.0<i>&plusmn;0.0</i></td><td>25.9<i>&plusmn;9.8</i></td>
+            </tr>
+            <tr>
+              <th scope="row">CE-CM-Div + CEM</th>
+              <td>55.6<i>&plusmn;0.0</i></td><td>44.4<i>&plusmn;0.0</i></td><td>37.0<i>&plusmn;3.7</i></td>
+            </tr>
+            <tr>
+              <th scope="row">Behavioral cloning</th>
+              <td>0.0<i>&plusmn;0.0</i></td><td>0.0<i>&plusmn;0.0</i></td><td>0.0<i>&plusmn;0.0</i></td>
+            </tr>
+            <tr class="ours-row">
+              <th scope="row">Ours + CEM</th>
+              <td class="best">92.6<i>&plusmn;3.7</i></td><td class="best">85.2<i>&plusmn;3.7</i></td><td class="best">63.0<i>&plusmn;7.4</i></td>
+            </tr>
+            <tr class="oracle">
+              <th scope="row">Oracle + CEM</th>
+              <td>96.3<i>&plusmn;3.7</i></td><td>88.9<i>&plusmn;6.4</i></td><td>70.4<i>&plusmn;3.7</i></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">
+          CE-CM-Div is a prior capability-inference method that uses state trajectories. Capacity-blind CEM assumes a
+          fixed default capability, and behavioral cloning imitates the demonstrations. Oracle CEM is given the true
+          constraints. All CEM methods share the same planner.
+        </p>
+      </div>
+    </div>
+    <p class="note">Mean &plusmn; standard error over three seeds.</p>
+
+    <div class="prose">
+      <h3>The inferred constraint changes the plan</h3>
+      <p>Planning with the inferred constraint keeps the helper's plan within what its partner can physically execute.</p>
+    </div>
+    <div class="pair">
+      <figure>
+        <picture>
+          <source srcset="static/images/plan_ignored.webp" type="image/webp">
+          <img src="static/images/plan_ignored.jpg" width="600" height="450" loading="lazy"
+               alt="Mobile dual-UR5 scene planned without the partner's constraint: the constrained robot's arm is sent to a pose it cannot reach.">
+        </picture>
+        <figcaption>When the planner ignores the partner's constraint, the plan needs a pose the partner cannot reach.</figcaption>
+      </figure>
+      <figure>
+        <picture>
+          <source srcset="static/images/plan_inferred.webp" type="image/webp">
+          <img src="static/images/plan_inferred.jpg" width="600" height="450" loading="lazy"
+               alt="The same scene planned with the inferred constraint, with the constrained robot in a different, feasible configuration.">
+        </picture>
+        <figcaption>With the inferred constraint, the planner picks a feasible alternative.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="block wrap" id="citation">
+    <h2>Citation</h2>
+    <!-- TODO: paste the BibTeX entry inside <pre>, and add a Copy button back above it:
+         <button class="copy" type="button" data-copy="#bibtex-text">Copy</button> -->
+    <div class="bibtex">
+<pre id="bibtex-text"></pre>
+    </div>
+  </section>
+
+</main>
+
+</body>
+</html>
